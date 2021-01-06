@@ -11,6 +11,10 @@
     "string_view": "c",
     "unordered_map": "c",
     "utility": "c",
-    "vector": "c"
+    "vector": "c",
+    "*.tcc": "cpp",
+    "complex": "cpp",
+    "istream": "cpp",
+    "ostream": "cpp"
   }
 }

@@ -145,7 +145,11 @@ static int tms_addr_str_to_stuct(char *str, struct sockaddr_in *addr)
   char *ip, *s_port;
   int port;
 
-  s_port = (ip = strtok(str, delim)) != NULL ? strtok(NULL, delim) : NULL;
+  strtok_r(str, delim, &ip);
+  if (ip != NULL)
+  {
+    strtok_r(NULL, delim, &s_port);
+  }
   if (!s_port)
   {
     return -1;

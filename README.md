@@ -14,6 +14,7 @@
 | docker-up-on-mac.sh   | 在 mac 环境运行时设置环境参数并启动。                         |
 | logs                  | docker-compose 启动时创建，存放 asterisk 日志。               |
 | media                 | docker-compose 启动时创建，存放拨号计划中应用使用的样本文件。 |
+| docker-18             | 存放 asterisk18 版本的源代码。                                |
 
 # 制作镜像
 

@@ -122,7 +122,7 @@ static int alaw_play(struct ast_channel *chan, const char *data)
     memset(f, 0, PKT_SIZE);
 
     AST_FRAME_SET_BUFFER(f, f, PKT_OFFSET, PKT_PAYLOAD);
-    f->src = strdup(src);
+    f->src = ast_strdup(src);
     /* 设置帧类型和编码格式 */
     f->frametype = AST_FRAME_VOICE;
     f->subclass.format = ast_format_alaw;
@@ -161,7 +161,7 @@ clean:
   /* Unlock module*/
   ast_module_user_remove(u);
 
-  free(parse);
+  ast_free(parse);
 
   /* Exit */
   return ret;

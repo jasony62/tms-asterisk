@@ -4,6 +4,7 @@ conf/*.conf
 logs/
 media/
 docker-13/asterisk*/
+docker-18/asterisk*/
 *.env
 *.pdf
 *.log

@@ -144,7 +144,7 @@ static void ff_rtp_send_data(RTPMuxContext *s, const uint8_t *buf1, int len, int
 
   AST_FRAME_SET_BUFFER(f, f, PKT_OFFSET, PKT_PAYLOAD);
 
-  f->src = strdup(s->video->src);
+  f->src = ast_strdup(s->video->src);
   /* Set type */
   f->frametype = AST_FRAME_VIDEO;
   /* Set number of samples */
@@ -686,7 +686,7 @@ clean:
   /* Unlock module*/
   ast_module_user_remove(u);
 
-  free(parse);
+  ast_free(parse);
 
   /* Exit */
   return 0;

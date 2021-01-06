@@ -293,22 +293,15 @@ int tms_rtp_send_audio(TmsAudioRtpContext *rtp, PCMAEnc *encoder, TmsPlayerConte
 
   return 0;
 }
-
-/* 输出视频packet信息 */
-void tms_dump_video_packet(AVPacket *pkt, TmsPlayerContext *player)
+/* 输出音频帧调试信息 */
+void tms_dump_audio_frame(AVFrame *frame, TmsPlayerContext *player)
 {
-  int64_t dts = pkt->dts == INT64_MIN ? -1 : pkt->dts;
-  int64_t pts = pkt->pts == INT64_MIN ? -1 : pkt->pts;
-  uint8_t *pkt_data = pkt->data;
+  // 	uint8_t *frame_dat = frame->extended_data[0];
+  // 	ast_debug(2, "frame前8个字节 %02x %02x %02x %02x %02x %02x %02x %02x \n", frame_dat[0], frame_dat[1], frame_dat[2], frame_dat[3], frame_dat[4], frame_dat[5], frame_dat[6], frame_dat[7]);
 
-  ast_debug(1, "读取媒体包 #%d 所属媒体流 #%d size= %d dts = %" PRId64 " pts = %" PRId64 "\n", player->nb_video_packets, pkt->stream_index, pkt->size, dts, pts);
-  if (player->nb_video_packets < 8)
-  {
-    ast_debug(2, "av_read_frame.packet 前12个字节 %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x\n", pkt_data[0], pkt_data[1], pkt_data[2], pkt_data[3], pkt_data[4], pkt_data[5], pkt_data[6], pkt_data[7], pkt_data[8], pkt_data[9], pkt_data[10], pkt_data[11]);
-  }
+  const char *frame_fmt = av_get_sample_fmt_name(frame->format);
 
-  int nal_unit_type = pkt_data[4] & 0x1f; // 5 bit
-  ast_debug(1, "媒体包 #%d 视频包 #%d nal_unit_type = %d\n", player->nb_packets, player->nb_video_packets, nal_unit_type);
+  ast_debug(2, "从音频包 #%d 中读取音频帧 #%d, format = %s , sample_rate = %d , channels = %d , nb_samples = %d, pts = %ld, best_effort_timestamp = %ld\n", player->nb_audio_packets, player->nb_audio_frames, frame_fmt, frame->sample_rate, frame->channels, frame->nb_samples, frame->pts, frame->best_effort_timestamp);
 }
 
 #endif

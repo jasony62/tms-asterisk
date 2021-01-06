@@ -88,7 +88,7 @@ static int tms_open_file(char *filename, AVFormatContext **ictx, AVBSFContext **
   int i = 0;
   for (; i < nb_streams; i++)
   {
-    TmsInputStream *ist = malloc(sizeof(TmsInputStream));
+    TmsInputStream *ist = ast_malloc(sizeof(TmsInputStream));
     tms_init_input_stream(*ictx, i, ist);
     tms_dump_stream_format(ist);
 
@@ -125,7 +125,7 @@ static void tms_free_input_streams(TmsInputStream **ists, int nb_streams)
   int i = 0;
   for (; i < nb_streams; i++)
   {
-    free(ists[i]);
+    ast_free(ists[i]);
   }
 }
 /* 根据指定的开始时间生成rtp起始时间戳 */
@@ -467,6 +467,7 @@ static int mp4_play_once(struct ast_channel *chan, char *filename, int *stop, in
     {
       ast_log(LOG_WARNING, "读取媒体包 #%d 失败 %s\n", player.nb_packets, av_err2str(ret));
       *stop = 1;
+      av_packet_unref(pkt);
       goto clean;
     }
 
@@ -476,6 +477,7 @@ static int mp4_play_once(struct ast_channel *chan, char *filename, int *stop, in
       if ((ret = tms_handle_video_packet(&player, ist, pkt, h264bsfc, &video_rtp_ctx)) < 0)
       {
         *stop = 1;
+        av_packet_unref(pkt);
         goto clean;
       }
     }
@@ -484,6 +486,7 @@ static int mp4_play_once(struct ast_channel *chan, char *filename, int *stop, in
       if ((ret = tms_handle_audio_packet(&player, ist, &resampler, &pcma_enc, pkt, frame, &audio_rtp_ctx)) < 0)
       {
         *stop = 1;
+        av_packet_unref(pkt);
         goto clean;
       }
     }
@@ -677,7 +680,7 @@ static int mp4_exec(struct ast_channel *chan, const char *data)
   ast_module_user_remove(u);
 
   /* 释放资源 */
-  free(parse);
+  ast_free(parse);
 
   ast_log(LOG_DEBUG, "退出TMSMp4Play(%s)\n", data);
 
